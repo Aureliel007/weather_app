@@ -1,0 +1,35 @@
+{
+    "name": "weather-app",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "prepare": "git config core.hooksPath .githooks",
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "test": "vitest",
+        "lint": "eslint src",
+        "lint:fix": "eslint src --fix",
+        "format": "prettier --write src"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.7.0",
+        "globals": "^17.7.0",
+        "jsdom": "^29.1.1",
+        "lint-staged": "^17.1.0",
+        "prettier": "^3.9.5",
+        "vite": "^8.1.1",
+        "vitest": "^4.1.10"
+    },
+    "lint-staged": {
+        "*.js": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.{html,css,json}": [
+            "prettier --write"
+        ]
+    }
+}
