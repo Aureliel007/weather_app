@@ -3,7 +3,7 @@ import {
     getHistory,
     addToHistory,
     clearHistory,
-} from '@/scripts/weatherHistory.js';
+} from '@/services/weatherHistory.js';
 
 describe('historyService', () => {
     beforeEach(() => {
