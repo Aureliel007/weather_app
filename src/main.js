@@ -117,6 +117,7 @@ form.addEventListener('submit', (event) => {
     event.preventDefault();
     const city = cityInput.value.trim();
     if (city) handleSearch(city);
+    cityInput.value = '';
 });
 
 clearButton.addEventListener('click', () => {
