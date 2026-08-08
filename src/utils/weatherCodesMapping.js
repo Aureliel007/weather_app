@@ -1,5 +1,3 @@
-// src/utils/weatherCodes.js
-
 const WEATHER_GROUPS = [
     { codes: [0], description: 'Ясно', icon: 'fa-sun' },
     {

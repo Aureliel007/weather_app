@@ -1,7 +1,6 @@
 import './css/style.css';
 
 import { getWeatherByCity } from './services/weatherService.js';
-import { getStaticMapUrl } from './services/mapService.js';
 import {
     getHistory,
     addToHistory,
@@ -9,6 +8,7 @@ import {
 } from './scripts/weatherHistory.js';
 import { getWeatherInfo } from './utils/weatherCodesMapping.js';
 import { formatDate, formatTime } from './utils/formatDateTime.js';
+import { renderMap } from './scripts/renderMap.js';
 
 const form = document.getElementById('cityForm');
 const cityInput = document.getElementById('cityInput');
@@ -31,7 +31,6 @@ const windValueEl = document.getElementById('windValue');
 const humidityValueEl = document.getElementById('humidityValue');
 const pressureValueEl = document.getElementById('pressureValue');
 
-const mapImageEl = document.getElementById('mapImage');
 const historyList = document.getElementById('historyList');
 const clearHistoryButton = document.getElementById('clearHistoryButton');
 
@@ -58,12 +57,6 @@ function renderWeather(data) {
     pressureValueEl.textContent = `${Math.round(data.pressure)} гПа`;
 
     showState('data');
-}
-
-function renderMap(latitude, longitude, cityName) {
-    const url = getStaticMapUrl(latitude, longitude);
-    mapImageEl.src = url;
-    mapImageEl.alt = `Карта города ${cityName}`;
 }
 
 function renderHistory(history) {
