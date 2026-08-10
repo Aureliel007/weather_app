@@ -26,7 +26,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - name: Build
+        env:
+          VITE_YANDEX_MAPS_KEY: ${{ secrets.VITE_YANDEX_MAPS_KEY }}
+        run: npm run build
       - name: Check build output exists
         run: test -d ./dist && ls -la ./dist
       - uses: actions/upload-pages-artifact@v3

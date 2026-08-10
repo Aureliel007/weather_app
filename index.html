@@ -1,13 +1,211 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>weather-app</title>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1"
+        />
+        <title>Weather Forecast</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        />
     </head>
     <body>
-        <div id="app"></div>
+        <div id="root">
+            <header>
+                <div class="container header-container">
+                    <h1>
+                        <i class="fas fa-cloud-sun"></i>
+                        Weather Forecast
+                    </h1>
+                </div>
+            </header>
+
+            <main class="container">
+                <section class="search-section">
+                    <div class="card">
+                        <h2>Найти город</h2>
+                        <form id="cityForm">
+                            <div class="input-wrapper">
+                                <input
+                                    type="text"
+                                    id="cityInput"
+                                    placeholder="Введите название города"
+                                    aria-label="Название города"
+                                    autocomplete="off"
+                                />
+                                <button
+                                    type="button"
+                                    id="clearButton"
+                                    class="clear-button"
+                                    aria-label="Очистить поле"
+                                >
+                                    <i class="fas fa-times-circle"></i>
+                                </button>
+                            </div>
+                            <button
+                                type="submit"
+                                id="searchButton"
+                                class="btn-primary"
+                            >
+                                Search
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <div class="desktop-container">
+                    <div class="main-content">
+                        <section class="weather-section">
+                            <div class="card">
+                                <div id="emptyState" class="state-container">
+                                    <i class="fas fa-cloud-sun state-icon"></i>
+                                    <h3>Погода ещё не найдена</h3>
+                                    <p>
+                                        Введите название города, чтобы увидеть
+                                        прогноз погоды
+                                    </p>
+                                </div>
+                                <div
+                                    id="loadingState"
+                                    class="state-container hidden"
+                                >
+                                    <div class="spinner"></div>
+                                    <h3>Загружаем данные...</h3>
+                                </div>
+                                <div
+                                    id="errorState"
+                                    class="state-container hidden"
+                                >
+                                    <i
+                                        class="fas fa-exclamation-circle state-icon error"
+                                    ></i>
+                                    <h3>Не удалось найти город</h3>
+                                    <p id="errorMessage">
+                                        Попробуйте ввести другое название
+                                    </p>
+                                </div>
+                                <div id="weatherData" class="hidden">
+                                    <div class="weather-header">
+                                        <div>
+                                            <h2 id="cityName"></h2>
+                                            <p id="currentDateTime"></p>
+                                        </div>
+                                        <div class="last-updated">
+                                            <i class="fas fa-history"></i>
+                                            <span id="lastUpdated"></span>
+                                        </div>
+                                    </div>
+                                    <div class="weather-content">
+                                        <div class="current-weather">
+                                            <div class="weather-primary">
+                                                <div class="weather-icon">
+                                                    <i class="fas fa-sun"></i>
+                                                </div>
+                                                <div>
+                                                    <div
+                                                        class="temperature"
+                                                        id="temperature"
+                                                    ></div>
+                                                    <div
+                                                        class="weather-description"
+                                                        id="weatherDescription"
+                                                    ></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="weather-details">
+                                                <div class="weather-detail">
+                                                    <i class="fas fa-wind"></i>
+                                                    <div>
+                                                        <p>Ветер</p>
+                                                        <p id="windValue"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="weather-detail">
+                                                    <i class="fas fa-tint"></i>
+                                                    <div>
+                                                        <p>Влажность</p>
+                                                        <p
+                                                            id="humidityValue"
+                                                        ></p>
+                                                    </div>
+                                                </div>
+                                                <div class="weather-detail">
+                                                    <i
+                                                        class="fas fa-compress-alt"
+                                                    ></i>
+                                                    <div>
+                                                        <p>Давление</p>
+                                                        <p
+                                                            id="pressureValue"
+                                                        ></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="map-section">
+                            <div class="card">
+                                <div class="section-header">
+                                    <h2>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        Карта
+                                    </h2>
+                                </div>
+                                <div class="map-container">
+                                    <img id="mapImage" src="" alt="" />
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="sidebar">
+                        <section class="history-section">
+                            <div class="card">
+                                <div class="section-header">
+                                    <h2>
+                                        <i class="fas fa-history"></i>
+                                        История поиска
+                                    </h2>
+                                </div>
+
+                                <div class="history-container">
+                                    <div
+                                        class="history-list"
+                                        id="historyList"
+                                    ></div>
+
+                                    <div class="history-actions">
+                                        <button
+                                            id="clearHistoryButton"
+                                            class="btn-secondary"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                            Очистить историю
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </main>
+
+            <footer>
+                <div class="container">
+                    <p>Weather Forecast App</p>
+                    <p>Данные предоставлены Open-Meteo</p>
+                </div>
+            </footer>
+        </div>
+
         <script type="module" src="/src/main.js"></script>
     </body>
 </html>
