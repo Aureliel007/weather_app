@@ -1,11 +1,15 @@
 import './css/style.css';
 
-import { getWeatherByCity } from '@/services/weatherService.js';
+import {
+    getWeatherByCity,
+    getWeatherByCoordinates,
+} from '@/services/weatherService.js';
 import {
     getHistory,
     addToHistory,
     clearHistory,
 } from '@/services/weatherHistory.js';
+import { getCurrentPosition } from '@/services/geolocationService.js';
 import { formatDate, formatTime } from '@/utils/formatDateTime.js';
 
 import { renderWeather } from '@/render/renderWeather.js';
@@ -17,6 +21,7 @@ const form = document.getElementById('cityForm');
 const cityInput = document.getElementById('cityInput');
 const clearButton = document.getElementById('clearButton');
 const searchButton = document.getElementById('searchButton');
+const geolocationButton = document.getElementById('geolocationButton');
 const errorMessageEl = document.getElementById('errorMessage');
 const clearHistoryButton = document.getElementById('clearHistoryButton');
 
@@ -49,6 +54,36 @@ async function handleSearch(cityName) {
         searchButton.disabled = false;
     }
 }
+
+async function handleGeolocation() {
+    geolocationButton.disabled = true;
+    showState('loading');
+
+    try {
+        const { latitude, longitude } = await getCurrentPosition();
+        const data = await getWeatherByCoordinates(latitude, longitude);
+
+        renderWeather(data);
+        renderMap(data.latitude, data.longitude, data.name);
+        cityInput.value = data.name;
+
+        addToHistory({
+            name: data.name,
+            country: data.country,
+            temperature: data.temperature,
+            weatherCode: data.weatherCode,
+            timestamp: `${formatDate()}, ${formatTime()}`,
+        });
+        refreshHistory();
+    } catch (err) {
+        errorMessageEl.textContent = err.message;
+        showState('error');
+    } finally {
+        geolocationButton.disabled = false;
+    }
+}
+
+geolocationButton.addEventListener('click', handleGeolocation);
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();

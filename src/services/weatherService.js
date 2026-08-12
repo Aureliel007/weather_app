@@ -1,5 +1,6 @@
 const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast';
+const REVERSE_GEOCODING_URL = 'https://nominatim.openstreetmap.org/reverse';
 
 export async function geocodeCity(cityName) {
     const params = new URLSearchParams({
@@ -19,6 +20,38 @@ export async function geocodeCity(cityName) {
 
     const { name, country, latitude, longitude } = data.results[0];
     return { name, country, latitude, longitude };
+}
+
+export async function reverseGeocode(latitude, longitude) {
+    const params = new URLSearchParams({
+        lat: latitude.toString(),
+        lon: longitude.toString(),
+        format: 'json',
+        'accept-language': 'ru',
+    });
+
+    const response = await fetch(`${REVERSE_GEOCODING_URL}?${params}`, {
+        headers: {
+            'Accept-Language': 'ru',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Ошибка обратного геокодинга: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const address = data.address ?? {};
+    const name =
+        address.city ||
+        address.town ||
+        address.village ||
+        address.municipality ||
+        data.name ||
+        'Неизвестное место';
+    const country = address.country || '';
+
+    return { name, country };
 }
 
 export async function fetchWeather(latitude, longitude) {
@@ -48,4 +81,13 @@ export async function getWeatherByCity(cityName) {
     const location = await geocodeCity(cityName);
     const weather = await fetchWeather(location.latitude, location.longitude);
     return { ...location, ...weather };
+}
+
+export async function getWeatherByCoordinates(latitude, longitude) {
+    const [location, weather] = await Promise.all([
+        reverseGeocode(latitude, longitude),
+        fetchWeather(latitude, longitude),
+    ]);
+
+    return { ...location, latitude, longitude, ...weather };
 }
