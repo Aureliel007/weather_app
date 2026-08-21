@@ -28,21 +28,31 @@
                     <div class="card">
                         <h2>Найти город</h2>
                         <form id="cityForm">
-                            <div class="input-wrapper">
-                                <input
-                                    type="text"
-                                    id="cityInput"
-                                    placeholder="Введите название города"
-                                    aria-label="Название города"
-                                    autocomplete="off"
-                                />
+                            <div class="search-row">
+                                <div class="input-wrapper">
+                                    <input
+                                        type="text"
+                                        id="cityInput"
+                                        placeholder="Введите название города"
+                                        aria-label="Название города"
+                                        autocomplete="off"
+                                    />
+                                    <button
+                                        type="button"
+                                        id="clearButton"
+                                        class="clear-button"
+                                        aria-label="Очистить поле"
+                                    >
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
+                                </div>
                                 <button
                                     type="button"
-                                    id="clearButton"
-                                    class="clear-button"
-                                    aria-label="Очистить поле"
+                                    id="geolocationButton"
+                                    class="btn-secondary"
+                                    aria-label="Определить местоположение"
                                 >
-                                    <i class="fas fa-times-circle"></i>
+                                    <i class="fas fa-location-arrow"></i>
                                 </button>
                             </div>
                             <button
