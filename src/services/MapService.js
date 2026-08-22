@@ -1,7 +1,7 @@
 export class MapService {
     #baseUrl = 'https://static-maps.yandex.ru/v1';
     #apiKey;
-    #maxWidth = 650;
+    #maxWidth = 600;
     #maxHeight = 450;
 
     constructor(apiKey) {
@@ -29,8 +29,7 @@ export class MapService {
             z: zoom.toString(),
             size: `${safeWidth},${safeHeight}`,
             l: 'map',
-            pt: `${longitude},${latitude},pm2rdm`,
-            scale: '2',
+            pt: `${longitude},${latitude},pm2dgm`,
             apikey: this.#apiKey ?? '',
         });
 
