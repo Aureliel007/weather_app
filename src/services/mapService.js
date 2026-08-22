@@ -1,14 +1,39 @@
-const API_KEY = import.meta.env.VITE_YANDEX_MAPS_KEY;
+export class MapService {
+    #baseUrl = 'https://static-maps.yandex.ru/v1';
+    #apiKey;
+    #maxWidth = 650;
+    #maxHeight = 450;
 
-export function getStaticMapUrl(latitude, longitude, width, height, zoom = 12) {
-    const params = new URLSearchParams({
-        ll: `${longitude},${latitude}`,
-        z: zoom.toString(),
-        size: `${width},${height}`,
-        l: 'map',
-        pt: `${longitude},${latitude},pm2dgm`,
-        apikey: API_KEY,
-    });
+    constructor(apiKey) {
+        this.#apiKey = apiKey;
+    }
 
-    return `https://static-maps.yandex.ru/1.x/?${params}`;
+    getStaticMapUrl(
+        latitude,
+        longitude,
+        width = this.#maxWidth,
+        height = this.#maxHeight,
+        zoom = 12
+    ) {
+        const safeWidth = Math.min(
+            Math.round(width) || this.#maxWidth,
+            this.#maxWidth
+        );
+        const safeHeight = Math.min(
+            Math.round(height) || this.#maxHeight,
+            this.#maxHeight
+        );
+
+        const params = new URLSearchParams({
+            ll: `${longitude},${latitude}`,
+            z: zoom.toString(),
+            size: `${safeWidth},${safeHeight}`,
+            l: 'map',
+            pt: `${longitude},${latitude},pm2rdm`,
+            scale: '2',
+            apikey: this.#apiKey ?? '',
+        });
+
+        return `${this.#baseUrl}?${params}`;
+    }
 }

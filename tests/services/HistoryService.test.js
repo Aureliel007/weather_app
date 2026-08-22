@@ -1,17 +1,16 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import {
-    getHistory,
-    addToHistory,
-    clearHistory,
-} from '@/services/weatherHistory.js';
+import { HistoryService } from '@/services/HistoryService.js';
 
 describe('historyService', () => {
+    let service;
+
     beforeEach(() => {
         localStorage.clear();
+        service = new HistoryService();
     });
 
     it('возвращает пустой массив, если истории ещё нет', () => {
-        expect(getHistory()).toEqual([]);
+        expect(service.getHistory()).toEqual([]);
     });
 
     it('добавляет город в историю', () => {
@@ -22,27 +21,27 @@ describe('historyService', () => {
             weatherCode: 0,
             timestamp: 'today',
         };
-        const result = addToHistory(entry);
+        const result = service.addToHistory(entry);
         expect(result).toHaveLength(1);
         expect(result[0].name).toBe('Moscow');
     });
 
     it('не дублирует город, поднимает его наверх', () => {
-        addToHistory({
+        service.addToHistory({
             name: 'Moscow',
             country: 'Russia',
             temperature: 15,
             weatherCode: 0,
             timestamp: 't1',
         });
-        addToHistory({
+        service.addToHistory({
             name: 'Paris',
             country: 'France',
             temperature: 17,
             weatherCode: 1,
             timestamp: 't2',
         });
-        const result = addToHistory({
+        const result = service.addToHistory({
             name: 'moscow',
             country: 'Russia',
             temperature: 16,
@@ -56,7 +55,7 @@ describe('historyService', () => {
 
     it('хранит не больше 10 записей', () => {
         for (let i = 0; i < 12; i++) {
-            addToHistory({
+            service.addToHistory({
                 name: `City${i}`,
                 country: 'X',
                 temperature: i,
@@ -64,20 +63,20 @@ describe('historyService', () => {
                 timestamp: `t${i}`,
             });
         }
-        const result = getHistory();
+        const result = service.getHistory();
         expect(result).toHaveLength(10);
         expect(result[0].name).toBe('City11');
     });
 
     it('очищает историю', () => {
-        addToHistory({
+        service.addToHistory({
             name: 'Moscow',
             country: 'Russia',
             temperature: 15,
             weatherCode: 0,
             timestamp: 't1',
         });
-        clearHistory();
-        expect(getHistory()).toEqual([]);
+        service.clearHistory();
+        expect(service.getHistory()).toEqual([]);
     });
 });
