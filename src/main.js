@@ -18,7 +18,7 @@ onLoad(() => {
     const root = document.getElementById('app');
     const services = {
         weatherService: new WeatherService(),
-        mapService: new MapService(import.meta.env.VITE_YANDEX_MAPS_API_KEY),
+        mapService: new MapService(import.meta.env.VITE_YANDEX_MAPS_KEY),
         historyService: new HistoryService(),
         geolocationService: new GeolocationService(),
     };
