@@ -26,7 +26,7 @@ export function createMapPanel(mapService) {
 
     function renderMap(latitude, longitude, cityName) {
         const width = Math.round(mapContainer.clientWidth);
-        const height = Math.round(width * (450 / 650));
+        const height = Math.round(width * (450 / 600));
 
         mapImage.src = mapService.getStaticMapUrl(
             latitude,

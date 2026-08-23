@@ -29,7 +29,7 @@ export class MapService {
             z: zoom.toString(),
             size: `${safeWidth},${safeHeight}`,
             l: 'map',
-            pt: `${longitude},${latitude},pm2dgm`,
+            pt: `${longitude},${latitude},pm2vvm`,
             apikey: this.#apiKey ?? '',
         });
 
