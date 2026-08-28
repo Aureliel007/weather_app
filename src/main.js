@@ -1,108 +1,28 @@
 import './css/style.css';
 
-import {
-    getWeatherByCity,
-    getWeatherByCoordinates,
-} from '@/services/weatherService.js';
-import {
-    getHistory,
-    addToHistory,
-    clearHistory,
-} from '@/services/weatherHistory.js';
-import { getCurrentPosition } from '@/services/geolocationService.js';
-import { formatDate, formatTime } from '@/utils/formatDateTime.js';
+import { WeatherService } from '@/services/WeatherService.js';
+import { MapService } from '@/services/MapService.js';
+import { HistoryService } from '@/services/HistoryService.js';
+import { GeolocationService } from '@/services/GeolocationService.js';
+import { renderApp, createApp } from '@/ui/layout.js';
 
-import { renderWeather } from '@/render/renderWeather.js';
-import { renderMap } from '@/render/renderMap.js';
-import { renderHistory } from '@/render/renderHistory.js';
-import { showState } from '@/render/showState.js';
-
-const form = document.getElementById('cityForm');
-const cityInput = document.getElementById('cityInput');
-const clearButton = document.getElementById('clearButton');
-const searchButton = document.getElementById('searchButton');
-const geolocationButton = document.getElementById('geolocationButton');
-const errorMessageEl = document.getElementById('errorMessage');
-const clearHistoryButton = document.getElementById('clearHistoryButton');
-
-function refreshHistory() {
-    renderHistory(getHistory(), (cityName) => handleSearch(cityName));
-}
-
-async function handleSearch(cityName) {
-    searchButton.disabled = true;
-    showState('loading');
-
-    try {
-        const data = await getWeatherByCity(cityName);
-        renderWeather(data);
-        renderMap(data.latitude, data.longitude, data.name);
-
-        addToHistory({
-            name: data.name,
-            country: data.country,
-            temperature: data.temperature,
-            weatherCode: data.weatherCode,
-            timestamp: `${formatDate()}, ${formatTime()}`,
-        });
-        refreshHistory();
-    } catch (err) {
-        errorMessageEl.textContent =
-            err.message || 'Попробуйте ввести другое название';
-        showState('error');
-    } finally {
-        searchButton.disabled = false;
+const onLoad = (fn) => {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fn);
+    } else {
+        fn();
     }
-}
+};
 
-async function handleGeolocation() {
-    geolocationButton.disabled = true;
-    showState('loading');
+onLoad(() => {
+    const root = document.getElementById('app');
+    const services = {
+        weatherService: new WeatherService(),
+        mapService: new MapService(import.meta.env.VITE_YANDEX_MAPS_KEY),
+        historyService: new HistoryService(),
+        geolocationService: new GeolocationService(),
+    };
 
-    try {
-        const { latitude, longitude } = await getCurrentPosition();
-        const data = await getWeatherByCoordinates(latitude, longitude);
-
-        renderWeather(data);
-        renderMap(data.latitude, data.longitude, data.name);
-        cityInput.value = data.name;
-
-        addToHistory({
-            name: data.name,
-            country: data.country,
-            temperature: data.temperature,
-            weatherCode: data.weatherCode,
-            timestamp: `${formatDate()}, ${formatTime()}`,
-        });
-        refreshHistory();
-    } catch (err) {
-        errorMessageEl.textContent = err.message;
-        showState('error');
-    } finally {
-        geolocationButton.disabled = false;
-    }
-}
-
-geolocationButton.addEventListener('click', handleGeolocation);
-
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const city = cityInput.value.trim();
-    if (city) handleSearch(city);
-    cityInput.value = '';
-});
-
-clearButton.addEventListener('click', () => {
-    cityInput.value = '';
-    cityInput.focus();
-});
-
-clearHistoryButton.addEventListener('click', () => {
-    clearHistory();
-    refreshHistory();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    refreshHistory();
-    showState('empty');
+    const app = createApp(services);
+    renderApp(app, root);
 });
