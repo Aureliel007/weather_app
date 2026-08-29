@@ -1,6 +1,6 @@
 import { createElement } from '@/utils/createElement.js';
 
-export function createMapPanel(mapService) {
+export function createMapPanel(eventBus) {
     const mapImage = createElement('img', { src: '', alt: '' });
     const mapContainer = createElement(
         'div',
@@ -24,18 +24,23 @@ export function createMapPanel(mapService) {
         mapContainer
     );
 
-    function renderMap(latitude, longitude, cityName) {
+    eventBus.on('weather:loaded', ({ data }) => {
         const width = Math.round(mapContainer.clientWidth);
         const height = Math.round(width * (450 / 600));
 
-        mapImage.src = mapService.getStaticMapUrl(
-            latitude,
-            longitude,
+        eventBus.trigger('map:request', {
+            latitude: data.latitude,
+            longitude: data.longitude,
             width,
-            height
-        );
-        mapImage.alt = `Карта города ${cityName}`;
-    }
+            height,
+            cityName: data.name,
+        });
+    });
 
-    return { element, renderMap };
+    eventBus.on('map:url-ready', ({ url, alt }) => {
+        mapImage.src = url;
+        mapImage.alt = alt;
+    });
+
+    return { element };
 }

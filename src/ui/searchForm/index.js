@@ -1,6 +1,6 @@
 import { createElement } from '@/utils/createElement.js';
 
-export function createSearchForm({ onSearch, onGeolocate }) {
+export function createSearchForm(eventBus) {
     const input = createElement('input', {
         type: 'text',
         id: 'cityInput',
@@ -32,7 +32,9 @@ export function createSearchForm({ onSearch, onGeolocate }) {
         createElement('i', { className: 'fas fa-location-arrow' })
     );
     geolocationButton.setAttribute('aria-label', 'Определить местоположение');
-    geolocationButton.addEventListener('click', () => onGeolocate());
+    geolocationButton.addEventListener('click', () => {
+        eventBus.trigger('search:geolocation');
+    });
 
     const searchRow = createElement(
         'div',
@@ -56,19 +58,20 @@ export function createSearchForm({ onSearch, onGeolocate }) {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const city = input.value.trim();
-        if (city) onSearch(city);
+        if (city) eventBus.trigger('search:city', { city });
     });
 
-    return {
-        element: form,
-        setValue: (value) => {
-            input.value = value;
-        },
-        setSearchDisabled: (disabled) => {
-            searchButton.disabled = disabled;
-        },
-        setGeolocationDisabled: (disabled) => {
-            geolocationButton.disabled = disabled;
-        },
+    const setDisabled = (disabled) => {
+        searchButton.disabled = disabled;
+        geolocationButton.disabled = disabled;
     };
+
+    eventBus.on('weather:loading', () => setDisabled(true));
+    eventBus.on('weather:loaded', ({ data }) => {
+        setDisabled(false);
+        input.value = data.name;
+    });
+    eventBus.on('weather:error', () => setDisabled(false));
+
+    return { element: form };
 }
