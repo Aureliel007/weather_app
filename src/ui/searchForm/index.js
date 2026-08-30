@@ -57,8 +57,8 @@ export function createSearchForm(eventBus) {
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
-        const city = input.value.trim();
-        if (city) eventBus.trigger('search:city', { city });
+        const cityName = input.value.trim();
+        if (cityName) eventBus.trigger('search:city', { cityName });
     });
 
     const setDisabled = (disabled) => {
@@ -69,7 +69,7 @@ export function createSearchForm(eventBus) {
     eventBus.on('weather:loading', () => setDisabled(true));
     eventBus.on('weather:loaded', ({ data }) => {
         setDisabled(false);
-        input.value = data.name;
+        input.value = '';
     });
     eventBus.on('weather:error', () => setDisabled(false));
 
