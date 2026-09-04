@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { EventEmitter } from '@/EventEmitter.js';
+import { EventEmitter } from '@/core/EventEmitter.js';
 import { mapHandler } from '@/handlers/mapHandler.js';
 
 describe('mapHandler', () => {

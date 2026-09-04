@@ -1,5 +1,5 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
-import { EventEmitter } from '@/EventEmitter.js';
+import { EventEmitter } from '@/core/EventEmitter.js';
 import { historyHandler } from '@/handlers/historyHandler.js';
 
 function createFakeHistoryService(initial = []) {

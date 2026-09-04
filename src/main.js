@@ -1,6 +1,6 @@
 import './css/style.css';
 
-import { EventEmitter } from '@/EventEmitter';
+import { EventEmitter } from '@/core/EventEmitter';
 import { renderApp, createApp } from '@/ui/layout.js';
 
 import { WeatherService } from '@/services/WeatherService.js';
