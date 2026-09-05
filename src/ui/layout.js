@@ -1,62 +1,39 @@
 import { createElement } from '@/utils/createElement.js';
-import { createSearchForm } from '@/ui/searchForm';
-import { createWeatherPanel } from '@/ui/weatherPanel';
-import { createMapPanel } from '@/ui/mapPanel';
-import { createHistoryPanel } from '@/ui/historyPanel';
+import { createWeatherView } from '@/ui/weatherView';
+import { createAboutPage } from '@/ui/aboutPage';
 
 export function renderApp(app, root) {
     root.append(app);
 }
 
 export function createApp(eventBus) {
-    const weatherPanel = createWeatherPanel(eventBus);
-    const mapPanel = createMapPanel(eventBus);
-    const historyPanel = createHistoryPanel(eventBus);
-    const searchForm = createSearchForm(eventBus);
+    const weatherView = createWeatherView(eventBus);
+    const aboutPage = createAboutPage();
 
-    const mainContent = createElement(
+    const aboutViewElement = createElement(
         'div',
-        { className: 'main-content' },
-        createElement(
-            'section',
-            { className: 'weather-section' },
-            createElement('div', { className: 'card' }, weatherPanel.element)
-        ),
-        createElement('section', { className: 'map-section' }, mapPanel.element)
+        { className: 'hidden' },
+        aboutPage.element
     );
 
-    const sidebar = createElement(
-        'div',
-        { className: 'sidebar' },
-        createElement(
-            'section',
-            { className: 'history-section' },
-            historyPanel.element
-        )
-    );
+    function showWeatherView() {
+        weatherView.element.classList.remove('hidden');
+        aboutViewElement.classList.add('hidden');
+    }
 
-    const desktopContainer = createElement(
-        'div',
-        { className: 'desktop-container' },
-        mainContent,
-        sidebar
-    );
+    function showAboutView() {
+        weatherView.element.classList.add('hidden');
+        aboutViewElement.classList.remove('hidden');
+    }
 
-    const searchSection = createElement(
-        'section',
-        { className: 'search-section' },
-        createElement(
-            'div',
-            { className: 'card' },
-            createElement('h2', {}, 'Найти город'),
-            searchForm.element
-        )
-    );
+    eventBus.on('route:home', showWeatherView);
+    eventBus.on('route:weather', showWeatherView);
+    eventBus.on('route:about', showAboutView);
 
     return createElement(
         'main',
         { className: 'container' },
-        searchSection,
-        desktopContainer
+        weatherView.element,
+        aboutViewElement
     );
 }
