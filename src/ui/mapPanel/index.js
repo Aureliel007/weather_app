@@ -42,5 +42,10 @@ export function createMapPanel(eventBus) {
         mapImage.alt = alt;
     });
 
+    eventBus.on('weather:reset', () => {
+        mapImage.src = '';
+        mapImage.alt = '';
+    });
+
     return { element };
 }

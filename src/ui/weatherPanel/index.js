@@ -16,6 +16,7 @@ export function createWeatherPanel(eventBus) {
         stateContainer.setErrorMessage(message);
         stateContainer.showState('error');
     });
+    eventBus.on('weather:reset', () => stateContainer.showState('empty'));
 
     return { element: stateContainer.element };
 }
