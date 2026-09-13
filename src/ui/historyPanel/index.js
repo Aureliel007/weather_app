@@ -35,14 +35,10 @@ export function createHistoryPanel(eventBus) {
         )
     );
 
-    const onSelect = (cityName) => {
-        eventBus.trigger('history:select', { cityName });
-    };
-
     eventBus.on('history:updated', ({ history }) => {
         historyList.innerHTML = '';
         history.forEach((entry) => {
-            historyList.append(createHistoryItem(entry, onSelect));
+            historyList.append(createHistoryItem(entry));
         });
     });
 

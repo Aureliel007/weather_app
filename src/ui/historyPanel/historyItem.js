@@ -1,9 +1,12 @@
 import { createElement } from '@/utils/createElement.js';
 import { getWeatherInfo } from '@/utils/weatherCodesMapping.js';
 
-export function createHistoryItem(entry, onSelect) {
+export function createHistoryItem(entry) {
     const { description } = getWeatherInfo(entry.weatherCode);
-    const item = createElement('div', { className: 'history-item' });
+    const item = createElement('a', {
+        className: 'history-item',
+        href: `#!/weather/${encodeURIComponent(entry.name)}`,
+    });
     item.innerHTML = `
     <div class="history-item-city">
       <div class="city-icon"><i class="fas fa-map-marker-alt"></i></div>
@@ -17,6 +20,5 @@ export function createHistoryItem(entry, onSelect) {
       <p>${description}</p>
     </div>
   `;
-    item.addEventListener('click', () => onSelect(entry.name));
     return item;
 }

@@ -58,7 +58,11 @@ export function createSearchForm(eventBus) {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const cityName = input.value.trim();
-        if (cityName) eventBus.trigger('search:city', { cityName });
+        if (!cityName) return;
+
+        eventBus.trigger('navigate:to', {
+            pathname: `/weather/${encodeURIComponent(cityName)}`,
+        });
     });
 
     const setDisabled = (disabled) => {
@@ -72,6 +76,9 @@ export function createSearchForm(eventBus) {
         input.value = '';
     });
     eventBus.on('weather:error', () => setDisabled(false));
+    eventBus.on('weather:reset', () => {
+        input.value = '';
+    });
 
     return { element: form };
 }

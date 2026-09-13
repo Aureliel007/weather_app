@@ -92,6 +92,21 @@ section {
     margin-bottom: 1.5rem;
 }
 
+/* About Section */
+.about-section h2 {
+    margin-bottom: 1rem;
+}
+
+.about-section p {
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.about-section p:last-child {
+    margin-bottom: 0;
+}
+
 /* Header */
 header {
     background-color: var(--primary-color);
@@ -104,6 +119,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 header h1 {
@@ -111,6 +128,24 @@ header h1 {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    opacity: 0.9;
+    transition: opacity var(--transition);
+}
+
+.nav-menu a:hover {
+    opacity: 1;
+    text-decoration: underline;
 }
 
 /* Footer */
@@ -454,6 +489,8 @@ input:focus {
         background-color var(--transition),
         transform var(--transition);
     cursor: pointer;
+    text-decoration: none;
+    color: inherit;
 }
 
 .history-item:hover {
@@ -506,6 +543,17 @@ input:focus {
 .history-actions {
     display: flex;
     justify-content: flex-end;
+}
+
+/* About Section */
+.about-section p {
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.about-section p:last-child {
+    margin-bottom: 0;
 }
 
 /* Desktop layout container */
