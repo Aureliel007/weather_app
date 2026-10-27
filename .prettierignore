@@ -1,0 +1,6 @@
+node_modules
+dist
+package-lock.json
+*.sandbox
+.github
+README.md

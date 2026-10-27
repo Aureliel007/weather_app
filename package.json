@@ -6,25 +6,30 @@
     "scripts": {
         "prepare": "git config core.hooksPath .githooks",
         "dev": "vite",
-        "build": "vite build",
+        "build": "npm run typecheck && vite build",
         "preview": "vite preview",
         "test": "vitest",
-        "lint": "eslint src",
-        "lint:fix": "eslint src --fix",
-        "format": "prettier --write src"
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
+        "@types/node": "^26.6.5",
         "eslint": "^10.7.0",
         "globals": "^17.7.0",
         "jsdom": "^29.1.1",
         "lint-staged": "^17.1.0",
         "prettier": "^3.9.5",
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.72.1",
         "vite": "^8.1.1",
         "vitest": "^4.1.10"
     },
     "lint-staged": {
-        "*.js": [
+        "*.ts": [
             "eslint --fix",
             "prettier --write"
         ],
